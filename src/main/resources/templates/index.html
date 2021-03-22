@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -46,9 +46,14 @@
             </li>
             -->
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Искать нечего" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <form method="POST" enctype="multipart/form-data" action="/upload">
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile01" name="file">
+                    <label class="custom-file-label" for="inputGroupFile01">Входной файл</label>
+                </div>
+                <input  class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Загрузить"/>
+            </div>
         </form>
     </div>
 </nav>
@@ -142,6 +147,9 @@
         </div>
     </div>
 
+    <div th:if="${message}">
+        <h2 th:text="${message}"/>
+    </div>
 
 
 </div>
