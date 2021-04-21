@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DefaultFileService implements FileService {
@@ -32,5 +34,13 @@ public class DefaultFileService implements FileService {
         catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }
+    }
+
+    @Override
+    public List<String> getValueCaptionsForReplace(String fileContent) {
+        List<String> result = new ArrayList<>();
+        result.add("First name");
+        result.add("Last name");
+        return result;
     }
 }
