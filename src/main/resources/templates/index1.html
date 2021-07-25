@@ -46,8 +46,8 @@
             </li>
             -->
         </ul>
-        <!--
         <form method="POST" enctype="multipart/form-data"action="/upload">
+        <!--<form method="POST" enctype="multipart/form-data" action="/upload"> -->
         <div class="input-group mb-3">
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="inputGroupFile01" name="file">
@@ -58,58 +58,82 @@
                 <input  class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Загрузить"/>
             </div>
         </form>
-        -->
     </div>
 </nav>
 
 
 <div class="container">
-    <div class="row">
-
-        <div class="col-5">
-            <form method="POST" enctype="multipart/form-data"action="/upload">
-                <div class="input-group mb-3">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile01" name="file">
-                        <input id="fileType" name="fileType" type="hidden" value="riba">
-                        <label class="custom-file-label" for="inputGroupFile01">Загрузите рыбу</label>
-                    </div>
-                    <input  class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Загрузить"/>
+<!--    <div class="row">
+        <div class="col-sm">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Фамилия</span>
                 </div>
-            </form>
-        </div>
-        <div class="col-7">
-            <div th:if="${file}">
-                <div th:if="${file.riba}">
-                    <a th:href="@{/file/(file=${file.riba})}"><h3 Успешно загружен файл th:text="${file.riba}"/></a>
-                </div>
+                <input type="text" class="form-control"  aria-describedby="basic-addon1">
             </div>
+        </div>
 
+        <div class="col-sm">
+            &lt;!&ndash;One of three columns&ndash;&gt;
+        </div>
+        <div class="col-sm">
+            &lt;!&ndash;One of three columns&ndash;&gt;
         </div>
     </div>
 
     <div class="row">
-        <div class="col-5">
-            <form method="POST" enctype="multipart/form-data"action="/upload">
-                <div class="input-group mb-3">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile02" name="file">
-                        <input id="fileType2" name="fileType" type="hidden" value="info">
-                        <label class="custom-file-label" for="inputGroupFile01">Загрузите информацию</label>
-                    </div>
-                    <input  class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Загрузить"/>
+        <div class="col-sm">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Имя</span>
                 </div>
-            </form>
-        </div>
-        <div class="col-7">
-            <div th:if="${file}">
-                <div th:if="${file.info}">
-                    <a th:href="@{/file/(file=${file.info})}"><h3 Успешно загружен файл th:text="${file.info}"/></a>
-                </div>
+                <input type="text" class="form-control" aria-describedby="basic-addon2">
             </div>
+        </div>
+
+        <div class="col-sm">
+            &lt;!&ndash;One of three columns&ndash;&gt;
+        </div>
+        <div class="col-sm">
+            &lt;!&ndash;One of three columns&ndash;&gt;
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-sm">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Отчество</span>
+                </div>
+                <input type="text" class="form-control">
+            </div>
+        </div>
+
+        <div class="col-sm">
+            &lt;!&ndash;One of three columns&ndash;&gt;
+        </div>
+        <div class="col-sm">
+            &lt;!&ndash;One of three columns&ndash;&gt;
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Организация</span>
+                </div>
+                <input type="text" class="form-control">
+            </div>
+        </div>
+
+        <div class="col-sm">
+            &lt;!&ndash;One of three columns&ndash;&gt;
+        </div>
+        <div class="col-sm">
+            &lt;!&ndash;One of three columns&ndash;&gt;
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-sm">
@@ -117,8 +141,15 @@
                 <button type="button" class="btn btn-primary btn-lg">Готово!</button>
             </div>
         </div>
-    </div>
-<!--
+
+        <div class="col-sm">
+            &lt;!&ndash;One of three columns&ndash;&gt;
+        </div>
+        <div class="col-sm">
+            &lt;!&ndash;One of three columns&ndash;&gt;
+        </div>
+    </div>-->
+
     <div>
         <h2>Сначала загрузите рыбу</h2>
         <div th:if="${file1}">
@@ -135,7 +166,6 @@
 
         </div>
     </div>
-    -->
 <!--
     <div th:if="${file}">
         <a th:href="@{/file/(file=${file})}"><h3 Успешно загружен файл th:text="${file}"/></a>
@@ -143,6 +173,13 @@
 -->
 
 </div>
+
+<table>
+    <tr th:each="var : ${#vars}">
+        <td th:text="${var.key}"></td>
+        <td th:text="${var.value}"></td>
+    </tr>
+</table>
 
 
 
