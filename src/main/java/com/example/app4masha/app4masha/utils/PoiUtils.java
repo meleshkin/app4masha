@@ -188,7 +188,7 @@ public class PoiUtils {
 
     private static String getCurrentDateStrLocalized() {
         ZonedDateTime zoned = ZonedDateTime.now();
-        DateTimeFormatter pattern = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Locale.getDefault());
+        DateTimeFormatter pattern = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(new Locale("ru", "RU"));
         return zoned.format(pattern);
     }
 }
