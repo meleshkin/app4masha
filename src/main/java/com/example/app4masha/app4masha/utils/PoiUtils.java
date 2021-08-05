@@ -77,8 +77,10 @@ public class PoiUtils {
             String organization = map.getOrganizationName();
             String punishment = map.getPunishment();
             //String outputFile = workDir + "/" + organization.replaceAll("\"", "").replaceAll("«", "").replaceAll("»", "")+".docx";
-            String latinedOrganization = toLatinTrans.transliterate(organization);
-            String outputFile = Paths.get(workDir, latinedOrganization + ".docx").normalize().toString();
+            //String latinedOrganization = toLatinTrans.transliterate(organization);
+            //String outputFile = Paths.get(workDir, latinedOrganization + ".docx").normalize().toString();
+            String fName = fileCount.get() + ".docx";
+            String outputFile = Paths.get(workDir, fName).normalize().toString();
             try {
                 //XWPFDocument doc = new XWPFDocument(OPCPackage.open(workDir + "/" +  ribaFilename));
                 XWPFDocument doc = new XWPFDocument(OPCPackage.open(Paths.get(workDir,ribaFilename).normalize().toString()));
@@ -86,7 +88,7 @@ public class PoiUtils {
                 processParagraphes(doc, organization, punishment);
                 FileOutputStream fis = new FileOutputStream(outputFile);
 
-                outputFiles[fileCount.getAndIncrement()] = Paths.get(workDir, latinedOrganization + ".docx").normalize().toFile();
+                outputFiles[fileCount.getAndIncrement()] = Paths.get(workDir, fName).normalize().toFile();
                 doc.write(fis);
                 doc.close();
                 fis.close();
