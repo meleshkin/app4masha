@@ -1,7 +1,6 @@
 package com.example.app4masha.app4masha.utils;
 
 import com.example.app4masha.app4masha.data.OrganizationAndPunishment;
-import com.ibm.icu.text.Transliterator;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -11,10 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.*;
 import org.zeroturnaround.zip.ZipUtil;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PoiUtils {
 
-    private static String CYRILLIC_TO_LATIN = "Russian-Latin/BGN";
 
     public Set<OrganizationAndPunishment> getOrganizationAndPunishmentFromInfoFile(String filename) throws IOException {
         Set<OrganizationAndPunishment> result = new HashSet<>();
@@ -69,15 +64,13 @@ public class PoiUtils {
 
     public static String processDirectory(String workDir, String ribaFilename, String infoFilename) throws Exception {
         Collection<OrganizationAndPunishment> kontoraAndPunishment = new PoiUtils().getOrganizationAndPunishmentFromInfoFile(workDir + "/" + infoFilename);
-        File[] outputFiles = new File[kontoraAndPunishment.size()];
+        File[] outputFiles = new File[kontoraAndPunishment.size()+1];
         AtomicInteger fileCount = new AtomicInteger(0);
-
-        Transliterator toLatinTrans = Transliterator.getInstance(CYRILLIC_TO_LATIN);
+        StringBuilder dictBuilder = new StringBuilder();
         kontoraAndPunishment.forEach(map -> {
             String organization = map.getOrganizationName();
             String punishment = map.getPunishment();
             //String outputFile = workDir + "/" + organization.replaceAll("\"", "").replaceAll("«", "").replaceAll("»", "")+".docx";
-            //String latinedOrganization = toLatinTrans.transliterate(organization);
             //String outputFile = Paths.get(workDir, latinedOrganization + ".docx").normalize().toString();
             String fName = fileCount.get() + ".docx";
             String outputFile = Paths.get(workDir, fName).normalize().toString();
@@ -88,20 +81,39 @@ public class PoiUtils {
                 processParagraphes(doc, organization, punishment);
                 FileOutputStream fis = new FileOutputStream(outputFile);
 
+                dictBuilder.append(fileCount.get());
+                dictBuilder.append(" ");
+                dictBuilder.append(organization);
+                dictBuilder.append("\n");
                 outputFiles[fileCount.getAndIncrement()] = Paths.get(workDir, fName).normalize().toFile();
+
+
                 doc.write(fis);
-                doc.close();
+                //doc.close();
                 fis.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
 
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get(workDir, "dict.txt").normalize().toFile()));
+            writer.write(dictBuilder.toString());
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         if (fileCount.get() > 0) {
             File output =  new File(workDir + "/result.zip");
+            outputFiles[outputFiles.length-1] = Paths.get(workDir, "dict.txt").normalize().toFile();
             ZipUtil.packEntries(outputFiles, output);
             return output.getAbsolutePath();
         }
+
+
 
 
         return null;
@@ -152,7 +164,7 @@ public class PoiUtils {
                                         String atText = r.getText(0);
                                         if (atText.equalsIgnoreCase("Date")) {
                                             r.setText(getCurrentDateStrLocalized(), 0);
-                                            System.out.println("Date -> " + getCurrentDateStrLocalized());
+                                            //System.out.println("Date -> " + getCurrentDateStrLocalized());
                                         } else if (atText.equalsIgnoreCase("TimeStart")) {
                                             r.setText("14ч 00мин.", 0);
                                         } else if (atText.equalsIgnoreCase("TimeFinish")) {
