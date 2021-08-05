@@ -1,6 +1,7 @@
 package com.example.app4masha.app4masha.utils;
 
 import com.example.app4masha.app4masha.data.OrganizationAndPunishment;
+import com.ibm.icu.text.Transliterator;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -22,6 +23,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PoiUtils {
+
+    private static String CYRILLIC_TO_LATIN = "Russian-Latin/BGN";
 
     public Set<OrganizationAndPunishment> getOrganizationAndPunishmentFromInfoFile(String filename) throws IOException {
         Set<OrganizationAndPunishment> result = new HashSet<>();
@@ -68,11 +71,14 @@ public class PoiUtils {
         Collection<OrganizationAndPunishment> kontoraAndPunishment = new PoiUtils().getOrganizationAndPunishmentFromInfoFile(workDir + "/" + infoFilename);
         File[] outputFiles = new File[kontoraAndPunishment.size()];
         AtomicInteger fileCount = new AtomicInteger(0);
+
+        Transliterator toLatinTrans = Transliterator.getInstance(CYRILLIC_TO_LATIN);
         kontoraAndPunishment.forEach(map -> {
             String organization = map.getOrganizationName();
             String punishment = map.getPunishment();
             //String outputFile = workDir + "/" + organization.replaceAll("\"", "").replaceAll("«", "").replaceAll("»", "")+".docx";
-            String outputFile = Paths.get(workDir, organization + ".docx").normalize().toString();
+            String latinedOrganization = toLatinTrans.transliterate(organization);
+            String outputFile = Paths.get(workDir, latinedOrganization + ".docx").normalize().toString();
             try {
                 //XWPFDocument doc = new XWPFDocument(OPCPackage.open(workDir + "/" +  ribaFilename));
                 XWPFDocument doc = new XWPFDocument(OPCPackage.open(Paths.get(workDir,ribaFilename).normalize().toString()));
@@ -80,7 +86,7 @@ public class PoiUtils {
                 processParagraphes(doc, organization, punishment);
                 FileOutputStream fis = new FileOutputStream(outputFile);
 
-                outputFiles[fileCount.getAndIncrement()] = Paths.get(workDir, organization + ".docx").normalize().toFile();
+                outputFiles[fileCount.getAndIncrement()] = Paths.get(workDir, latinedOrganization + ".docx").normalize().toFile();
                 doc.write(fis);
                 doc.close();
                 fis.close();
