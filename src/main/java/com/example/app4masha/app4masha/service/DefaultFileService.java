@@ -83,4 +83,10 @@ public class DefaultFileService implements FileService {
         }
     }
 
+    @Override
+    public String getWorkDirName() {
+        return this.rootLocation.resolve(Paths.get(WORK_DIR).normalize().toAbsolutePath()).toString();
+    }
+
+
 }

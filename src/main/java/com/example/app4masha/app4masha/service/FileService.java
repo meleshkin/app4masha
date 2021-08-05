@@ -18,4 +18,6 @@ public interface FileService {
     void createDir(String dirName) throws StorageException;
 
     void removeDir(String dirName) throws StorageException;
+
+    String getWorkDirName();
 }

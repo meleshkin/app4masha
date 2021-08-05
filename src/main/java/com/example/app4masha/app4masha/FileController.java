@@ -3,6 +3,7 @@ package com.example.app4masha.app4masha;
 import com.example.app4masha.app4masha.service.FileDto;
 import com.example.app4masha.app4masha.service.FileService;
 import com.example.app4masha.app4masha.service.exception.StorageException;
+import com.example.app4masha.app4masha.utils.PoiUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -62,6 +63,33 @@ public class FileController {
         }
 
         return "redirect:/";
+    }
+
+
+    @PostMapping(path = "/process", produces="application/zip")
+    public ResponseEntity<ByteArrayResource> download() throws IOException {
+        String resultFilename = null;
+        try {
+            resultFilename = PoiUtils.processDirectory(fileService.getWorkDirName(), FileService.RIBA_NAME, FileService.INFO_NAME);
+
+            File file2Upload = new File(resultFilename);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            headers.add("Pragma", "no-cache");
+            headers.add("Expires", "0");
+
+            Path path = Paths.get(file2Upload.getAbsolutePath());
+            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(file2Upload.length())
+                    .body(resource);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @GetMapping(path = "/file")

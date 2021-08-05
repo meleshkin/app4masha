@@ -48,6 +48,26 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zeroturnaround</groupId>
+			<artifactId>zt-zip</artifactId>
+			<version>1.14</version>
+			<type>jar</type>
+		</dependency>
+
 	</dependencies>
 
 	<build>
